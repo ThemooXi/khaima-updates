@@ -1,8 +1,8 @@
 {
-  "versionCode": 5,
-  "versionName": "1.4",
-  "apkUrl": "https://github.com/ThemooXi/khaima-updates/releases/download/apk/khaima-1.4.apk",
-  "notes": "تحديث خيمة ١٫٤ — إشعارات التحديث، مزامنة القصائد والحسابات تلقائياً",
+  "versionCode": 6,
+  "versionName": "1.4.0",
+  "apkUrl": "https://github.com/ThemooXi/khaima-updates/releases/download/v1.4.0/khaima-1.4.0.apk",
+  "notes": "تحديث خيمة ١٫٤٫٠\n• إصلاح التحويل بين القصائد (لا تعليق بعد التبديل)\n• تحسين إشعارات التحديث والقصائد الجديدة على شريط الهاتف\n• تقليل خطأ 429 من يوتيوب مع تخزين مؤقت للروابط\n• إدارة كاملة للقصائد للمطور الرئيسي\n• إصلاح تعطل التطبيق عند فراغ القائمة",
   "lockAll": false,
   "minVersionCode": 0,
   "telegramUrl": "https://t.me/IIIIll_1",
