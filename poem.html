@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>خيمة — فتح القصيدة</title>
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --card: #161616;
+      --border: #2a2a2a;
+      --red: #c41e3a;
+      --white: #f5f5f5;
+      --muted: #8a8a8a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Tajawal", "Segoe UI", Tahoma, sans-serif;
+      background:
+        radial-gradient(ellipse at top, rgba(196, 30, 58, 0.18), transparent 55%),
+        var(--bg);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px 22px;
+      text-align: center;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+    }
+    .brand {
+      font-size: 28px;
+      font-weight: 700;
+      margin: 0 0 6px;
+      letter-spacing: 0.5px;
+    }
+    .sub {
+      color: var(--muted);
+      font-size: 14px;
+      margin: 0 0 22px;
+      line-height: 1.6;
+    }
+    .status {
+      color: var(--muted);
+      font-size: 13px;
+      min-height: 20px;
+      margin-bottom: 18px;
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      border: 0;
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      margin-bottom: 10px;
+    }
+    .btn-primary {
+      background: var(--red);
+      color: #fff;
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid var(--border);
+    }
+    .hint {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1 class="brand">خيمة</h1>
+    <p class="sub">قصائد حسينية — افتح القصيدة في التطبيق أو ثبّته إن لم يكن لديك</p>
+    <p id="status" class="status">جاري فتح التطبيق…</p>
+    <a id="openApp" class="btn btn-primary" href="#">فتح في تطبيق خيمة</a>
+    <a id="install" class="btn btn-ghost" href="#" style="display:none">تثبيت التطبيق</a>
+    <p class="hint">
+      إن كان التطبيق مثبتاً سيُفتح المشغّل مباشرة.<br />
+      وإلا استخدم زر التثبيت لتحميل أحدث نسخة.
+    </p>
+  </main>
+
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var poemId = params.get("id") || "";
+      var statusEl = document.getElementById("status");
+      var openBtn = document.getElementById("openApp");
+      var installBtn = document.getElementById("install");
+      var updateJson =
+        "https://raw.githubusercontent.com/ThemooXi/khaima-updates/main/update.json";
+
+      if (!/^\d+$/.test(poemId)) {
+        statusEl.textContent = "رابط القصيدة غير صالح.";
+        openBtn.style.display = "none";
+        return;
+      }
+
+      var appLink = "khaima://poem/" + poemId;
+      openBtn.href = appLink;
+
+      function tryOpenApp() {
+        statusEl.textContent = "جاري فتح التطبيق…";
+        var iframe = document.createElement("iframe");
+        iframe.style.display = "none";
+        iframe.src = appLink;
+        document.body.appendChild(iframe);
+        window.location.href = appLink;
+        setTimeout(function () {
+          statusEl.textContent = "لم يتم العثور على التطبيق — يمكنك تثبيته بالأسفل.";
+          installBtn.style.display = "block";
+        }, 1600);
+      }
+
+      fetch(updateJson, { cache: "no-store" })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          if (data && data.apkUrl) {
+            installBtn.href = data.apkUrl;
+            installBtn.textContent =
+              "تثبيت خيمة" + (data.versionName ? " " + data.versionName : "");
+          } else {
+            installBtn.href =
+              "https://github.com/ThemooXi/khaima-updates/releases";
+            installBtn.textContent = "تحميل من الإصدارات";
+          }
+          installBtn.style.display = "block";
+        })
+        .catch(function () {
+          installBtn.href =
+            "https://github.com/ThemooXi/khaima-updates/releases";
+          installBtn.textContent = "تحميل من الإصدارات";
+          installBtn.style.display = "block";
+        });
+
+      openBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        tryOpenApp();
+      });
+
+      tryOpenApp();
+    })();
+  </script>
+</body>
+</html>
