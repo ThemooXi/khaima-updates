@@ -106,6 +106,8 @@
       var installBtn = document.getElementById("install");
       var updateJson =
         "https://raw.githubusercontent.com/ThemooXi/khaima-updates/main/update.json";
+      var releasesApi =
+        "https://api.github.com/repos/ThemooXi/khaima-updates/releases/latest";
 
       if (!/^\d+$/.test(poemId)) {
         statusEl.textContent = "رابط القصيدة غير صالح.";
@@ -129,25 +131,57 @@
         }, 1600);
       }
 
-      fetch(updateJson, { cache: "no-store" })
-        .then(function (r) { return r.json(); })
-        .then(function (data) {
-          if (data && data.apkUrl) {
-            installBtn.href = data.apkUrl;
-            installBtn.textContent =
-              "تثبيت خيمة" + (data.versionName ? " " + data.versionName : "");
-          } else {
-            installBtn.href =
-              "https://github.com/ThemooXi/khaima-updates/releases";
-            installBtn.textContent = "تحميل من الإصدارات";
+      function setInstall(url, label) {
+        installBtn.href = url;
+        installBtn.textContent = label || "تثبيت التطبيق";
+        installBtn.style.display = "block";
+      }
+
+      function loadFromUpdateJson() {
+        return fetch(updateJson, { cache: "no-store" })
+          .then(function (r) { return r.json(); })
+          .then(function (data) {
+            if (data && data.apkUrl) {
+              setInstall(
+                data.apkUrl,
+                "تثبيت خيمة" + (data.versionName ? " " + data.versionName : "")
+              );
+            } else {
+              throw new Error("no apkUrl");
+            }
+          });
+      }
+
+      fetch(releasesApi, {
+        cache: "no-store",
+        headers: { Accept: "application/vnd.github+json" }
+      })
+        .then(function (r) {
+          if (!r.ok) throw new Error("releases");
+          return r.json();
+        })
+        .then(function (release) {
+          var asset = null;
+          if (release && release.assets) {
+            for (var i = 0; i < release.assets.length; i++) {
+              var a = release.assets[i];
+              if ((a.name || "").toLowerCase().endsWith(".apk") && a.browser_download_url) {
+                asset = a;
+                break;
+              }
+            }
           }
-          installBtn.style.display = "block";
+          if (!asset) throw new Error("no apk");
+          var ver = (release.tag_name || "").replace(/^APK-?/i, "").replace(/^v/i, "");
+          setInstall(asset.browser_download_url, "تثبيت خيمة" + (ver ? " " + ver : ""));
         })
         .catch(function () {
-          installBtn.href =
-            "https://github.com/ThemooXi/khaima-updates/releases";
-          installBtn.textContent = "تحميل من الإصدارات";
-          installBtn.style.display = "block";
+          return loadFromUpdateJson().catch(function () {
+            setInstall(
+              "https://github.com/ThemooXi/khaima-updates/releases/latest",
+              "تحميل من الإصدارات"
+            );
+          });
         });
 
       openBtn.addEventListener("click", function (e) {
