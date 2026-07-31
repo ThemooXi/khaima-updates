@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>خيمة — تحميل التطبيق</title>
+  <meta name="description" content="حمّل تطبيق خيمة للقصائد الحسينية — أحدث نسخة مباشرة." />
+  <meta name="theme-color" content="#0A0A0A" />
+  <link rel="icon" type="image/png" href="app-icon.png" />
+  <link rel="apple-touch-icon" href="app-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --bg2: #121212;
+      --card: #161616;
+      --border: #2a2a2a;
+      --red: #c41e3a;
+      --red-deep: #8b1528;
+      --white: #f5f5f5;
+      --muted: #8a8a8a;
+      --ok: #2e7d4f;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      font-family: "Tajawal", "Segoe UI", Tahoma, sans-serif;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(196, 30, 58, 0.22), transparent 60%),
+        radial-gradient(ellipse 60% 40% at 100% 100%, rgba(139, 21, 40, 0.12), transparent 50%),
+        var(--bg);
+      color: var(--white);
+      padding: 28px 18px 40px;
+    }
+    .wrap {
+      width: 100%;
+      max-width: 440px;
+      margin: 0 auto;
+    }
+    .hero {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+    .icon {
+      width: 112px;
+      height: 112px;
+      border-radius: 28px;
+      object-fit: cover;
+      background: #000;
+      border: 1px solid var(--border);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+      margin: 0 auto 16px;
+      display: block;
+    }
+    .brand {
+      font-size: 30px;
+      font-weight: 800;
+      margin: 0 0 6px;
+      letter-spacing: 0.02em;
+    }
+    .brand span { color: var(--red); }
+    .tagline {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 20px 18px;
+      margin-bottom: 14px;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
+    }
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .info {
+      color: var(--muted);
+      font-size: 13.5px;
+      line-height: 1.75;
+      margin: 0 0 14px;
+    }
+    .meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      min-height: 28px;
+      margin-bottom: 14px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(196, 30, 58, 0.14);
+      color: #ffb3bf;
+      border: 1px solid rgba(196, 30, 58, 0.35);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 12.5px;
+      font-weight: 700;
+    }
+    .badge.ready {
+      background: rgba(46, 125, 79, 0.16);
+      color: #9be0b5;
+      border-color: rgba(46, 125, 79, 0.4);
+    }
+    .badge.err {
+      background: rgba(140, 40, 40, 0.2);
+      color: #ffb4b4;
+      border-color: rgba(180, 60, 60, 0.4);
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      border: 0;
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-size: 15px;
+      font-weight: 800;
+      font-family: inherit;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      margin-bottom: 10px;
+      transition: opacity .15s ease, transform .15s ease;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn:disabled,
+    .btn.is-disabled {
+      pointer-events: none;
+      opacity: 0.55;
+    }
+    .btn-primary {
+      background: linear-gradient(180deg, var(--red), var(--red-deep));
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(196, 30, 58, 0.35);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid var(--border);
+    }
+    .btn-soft {
+      background: var(--bg2);
+      color: var(--white);
+      border: 1px solid var(--border);
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .row .btn { margin-bottom: 0; }
+    .hint {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.65;
+      text-align: center;
+    }
+    .qr-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 0 4px;
+    }
+    .qr-box {
+      background: #fff;
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+    .qr-box img {
+      display: block;
+      width: 200px;
+      height: 200px;
+    }
+    .url {
+      direction: ltr;
+      text-align: center;
+      font-size: 11.5px;
+      color: var(--muted);
+      word-break: break-all;
+      line-height: 1.5;
+      margin: 0;
+    }
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%) translateY(20px);
+      background: #222;
+      color: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 16px;
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+      z-index: 20;
+      white-space: nowrap;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 11.5px;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <img class="icon" src="app-icon.png" width="112" height="112" alt="أيقونة خيمة" />
+      <h1 class="brand">خي<span>مة</span></h1>
+      <p class="tagline">للقصائد الحسينية</p>
+    </header>
+
+    <section class="card">
+      <h2>تحميل التطبيق</h2>
+      <p class="info">
+        تطبيق خيمة للاستماع إلى القصائد الحسينية وتشغيلها بسهولة — بدون حساب إجباري للتصفح، مع مكتبتك وتنزيلاتك على جهازك.
+      </p>
+      <div class="meta">
+        <span class="badge" id="versionBadge">جاري جلب أحدث نسخة…</span>
+      </div>
+      <a class="btn btn-primary is-disabled" id="installBtn" href="#" download>تحميل وتثبيت</a>
+      <a class="btn btn-ghost" href="https://t.me/IIIIll_1" target="_blank" rel="noopener">قناة تيليجرام</a>
+      <p class="hint">
+        بعد الضغط يبدأ التحميل ويظهر شريط التقدم في إشعارات النظام.
+        قد تحتاج السماح بالتثبيت من مصادر غير معروفة.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>ادعُ صديقاً</h2>
+      <p class="info">شارك رابط تحميل خيمة مع أهلك وأصدقائك ليثبّتوا أحدث نسخة مباشرة.</p>
+      <div class="row">
+        <button type="button" class="btn btn-soft" id="shareBtn">مشاركة الرابط</button>
+        <button type="button" class="btn btn-soft" id="copyBtn">نسخ الرابط</button>
+      </div>
+      <p class="hint" id="shareHint">حمّل تطبيق خيمة للقصائد الحسينية من هنا.</p>
+    </section>
+
+    <section class="card">
+      <h2>باركود التحميل</h2>
+      <p class="info">وجّه كاميرا الهاتف إلى هذا الباركود لفتح صفحة التحميل على جهاز آخر.</p>
+      <div class="qr-wrap">
+        <div class="qr-box">
+          <img id="qrImg" alt="باركود تحميل خيمة" width="200" height="200" />
+        </div>
+        <p class="url" id="pageUrl"></p>
+      </div>
+    </section>
+
+    <p class="footer">خيمة — أحدث نسخة تُجلب تلقائياً من GitHub</p>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    (function () {
+      var RELEASES_API = "https://api.github.com/repos/ThemooXi/khaima-updates/releases/latest";
+      var UPDATE_JSON = "https://raw.githubusercontent.com/ThemooXi/khaima-updates/main/update.json";
+      var INSTALL_FALLBACK = "https://themooxi.github.io/khaima-updates/install.html";
+
+      var badge = document.getElementById("versionBadge");
+      var btn = document.getElementById("installBtn");
+      var shareBtn = document.getElementById("shareBtn");
+      var copyBtn = document.getElementById("copyBtn");
+      var shareHint = document.getElementById("shareHint");
+      var qrImg = document.getElementById("qrImg");
+      var pageUrlEl = document.getElementById("pageUrl");
+      var toast = document.getElementById("toast");
+
+      var pageUrl = (function () {
+        try {
+          var u = new URL(window.location.href);
+          u.hash = "";
+          u.search = "";
+          if (!/install\.html$/i.test(u.pathname) && !/\/$/.test(u.pathname)) {
+            return INSTALL_FALLBACK;
+          }
+          if (/\/$/.test(u.pathname) || u.pathname === "" || u.pathname.endsWith("/khaima-updates")) {
+            return INSTALL_FALLBACK;
+          }
+          return u.toString();
+        } catch (e) {
+          return INSTALL_FALLBACK;
+        }
+      })();
+
+      // Always advertise the stable install URL used by the app
+      var shareUrl = INSTALL_FALLBACK;
+      pageUrlEl.textContent = shareUrl;
+      shareHint.textContent = "حمّل تطبيق خيمة للقصائد الحسينية:\n" + shareUrl;
+      qrImg.src =
+        "https://api.qrserver.com/v1/create-qr-code/?size=400x400&margin=8&data=" +
+        encodeURIComponent(shareUrl);
+
+      function showToast(msg) {
+        toast.textContent = msg;
+        toast.classList.add("show");
+        clearTimeout(showToast._t);
+        showToast._t = setTimeout(function () {
+          toast.classList.remove("show");
+        }, 2200);
+      }
+
+      function setReady(apkUrl, versionLabel) {
+        btn.href = apkUrl;
+        btn.classList.remove("is-disabled");
+        btn.setAttribute("download", versionLabel ? ("khaima-" + versionLabel + ".apk") : "khaima.apk");
+        badge.textContent = versionLabel ? ("الإصدار " + versionLabel) : "جاهز للتحميل";
+        badge.classList.add("ready");
+        badge.classList.remove("err");
+      }
+
+      function setError(msg) {
+        badge.textContent = msg;
+        badge.classList.add("err");
+        badge.classList.remove("ready");
+      }
+
+      function pickApkAsset(release) {
+        if (!release || !release.assets) return null;
+        for (var i = 0; i < release.assets.length; i++) {
+          var a = release.assets[i];
+          var name = (a.name || "").toLowerCase();
+          if (name.endsWith(".apk") && a.browser_download_url) return a;
+        }
+        return null;
+      }
+
+      function versionFromRelease(release, asset) {
+        if (release && release.tag_name) {
+          return String(release.tag_name).replace(/^APK-?/i, "").replace(/^v/i, "");
+        }
+        if (asset && asset.name) {
+          return String(asset.name).replace(/^khaima-?/i, "").replace(/\.apk$/i, "");
+        }
+        return "";
+      }
+
+      function loadFromUpdateJson() {
+        return fetch(UPDATE_JSON, { cache: "no-store" })
+          .then(function (r) {
+            if (!r.ok) throw new Error("update.json");
+            return r.json();
+          })
+          .then(function (data) {
+            if (!data || !data.apkUrl) throw new Error("no apkUrl");
+            setReady(data.apkUrl, data.versionName || "");
+          });
+      }
+
+      fetch(RELEASES_API, {
+        cache: "no-store",
+        headers: { Accept: "application/vnd.github+json" }
+      })
+        .then(function (r) {
+          if (!r.ok) throw new Error("releases");
+          return r.json();
+        })
+        .then(function (release) {
+          var asset = pickApkAsset(release);
+          if (!asset) throw new Error("no apk");
+          setReady(asset.browser_download_url, versionFromRelease(release, asset));
+        })
+        .catch(function () {
+          return loadFromUpdateJson().catch(function () {
+            setError("تعذّر جلب رابط التحميل");
+            btn.href = "https://github.com/ThemooXi/khaima-updates/releases/latest";
+            btn.classList.remove("is-disabled");
+            btn.removeAttribute("download");
+            btn.textContent = "فتح صفحة الإصدارات";
+          });
+        });
+
+      async function copyText(text) {
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(text);
+            return true;
+          }
+        } catch (e) {}
+        try {
+          var ta = document.createElement("textarea");
+          ta.value = text;
+          ta.setAttribute("readonly", "");
+          ta.style.position = "fixed";
+          ta.style.opacity = "0";
+          document.body.appendChild(ta);
+          ta.select();
+          var ok = document.execCommand("copy");
+          document.body.removeChild(ta);
+          return ok;
+        } catch (e2) {
+          return false;
+        }
+      }
+
+      shareBtn.addEventListener("click", async function () {
+        var text = "حمّل تطبيق خيمة للقصائد الحسينية:\n" + shareUrl;
+        if (navigator.share) {
+          try {
+            await navigator.share({ title: "خيمة", text: text, url: shareUrl });
+            return;
+          } catch (e) {}
+        }
+        if (await copyText(text)) showToast("تم نسخ رسالة الدعوة");
+        else showToast("انسخ الرابط يدوياً من الأسفل");
+      });
+
+      copyBtn.addEventListener("click", async function () {
+        if (await copyText(shareUrl)) showToast("تم نسخ رابط التحميل");
+        else showToast("تعذّر النسخ");
+      });
+    })();
+  </script>
+</body>
+</html>
