@@ -401,6 +401,10 @@
       var RELEASES_API = "https://api.github.com/repos/ThemooXi/khaima-updates/releases/latest";
       var UPDATE_JSON = "https://raw.githubusercontent.com/ThemooXi/khaima-updates/main/update.json";
       var INSTALL_FALLBACK = "https://themooxi.github.io/khaima-updates/install.html";
+      // احتياط مباشر إن فشل الـ API أو كان apkUrl فارغاً
+      var APK_FALLBACK =
+        "https://github.com/ThemooXi/khaima-updates/releases/download/apk-1.7.0/khaima-1.7.0.apk";
+      var VERSION_FALLBACK = "1.7.0";
 
       var badge = document.getElementById("versionBadge");
       var btn = document.getElementById("installBtn");
@@ -487,9 +491,14 @@
             return r.json();
           })
           .then(function (data) {
-            if (!data || !data.apkUrl) throw new Error("no apkUrl");
-            setReady(data.apkUrl, data.versionName || "");
+            var url = data && String(data.apkUrl || "").trim();
+            if (!url) throw new Error("no apkUrl");
+            setReady(url, data.versionName || "");
           });
+      }
+
+      function applyHardFallback() {
+        setReady(APK_FALLBACK, VERSION_FALLBACK);
       }
 
       fetch(RELEASES_API, {
@@ -507,11 +516,8 @@
         })
         .catch(function () {
           return loadFromUpdateJson().catch(function () {
-            setError("تعذّر جلب رابط التحميل");
-            btn.href = "https://github.com/ThemooXi/khaima-updates/releases/latest";
-            btn.classList.remove("is-disabled");
-            btn.removeAttribute("download");
-            btn.textContent = "فتح صفحة الإصدارات";
+            // لا تُظهر خطأ إن وُجد رابط احتياطي معروف
+            applyHardFallback();
           });
         });
 
